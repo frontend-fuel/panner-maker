@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paneer Maker Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+            --gradient-secondary: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            --card-shadow-hover: 0 20px 40px rgba(37, 99, 235, 0.15);
+        }
+
+        body {
+            transition: var(--transition-smooth);
+            padding-top: 2rem;
+            min-height: 100vh;
+            background: var(--bs-body-bg);
+        }
+
+        .dashboard-card {
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+            border: none;
+            background: linear-gradient(165deg, var(--bs-card-bg), var(--bs-card-cap-bg));
+            overflow: hidden;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
+            padding: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .value-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: var(--transition-smooth);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 1030;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(10px);
+            background: rgba(var(--bs-body-bg-rgb), 0.8);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        canvas {
+            max-height: 300px;
+            width: 100% !important;
+            transition: var(--transition-smooth);
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            transition: var(--transition-smooth);
+        }
+
+        [data-bs-theme="dark"] .dashboard-card {
+            background: linear-gradient(145deg, #212529, #1a1d20);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="btn theme-toggle" id="themeToggle">
+        <i class="bi bi-moon-stars"></i>
+    </button>
+
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Live Paneer Maker Updates by IoT</h1>
+            <p class="text-muted" id="lastUpdate">Last updated: --</p>
+            <div class="border-bottom border-primary w-25 mx-auto mt-3" style="opacity: 0.5;"></div>
+        </div>
+        <div class="row g-4">
+            <!-- Temperature Card -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Temperature</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="value-display" id="temperature">--°C</div>
+                        <canvas id="temperatureChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milk Level Card -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Milk Level</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="value-display" id="milkLevel">--%</div>
+                        <canvas id="milkLevelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buzzer Status Card -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Buzzer Status</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="value-display" id="buzzerStatus">--</div>
+                        <div id="buzzerIndicator" class="mt-3">
+                            <div class="alert alert-secondary">Waiting for data...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
